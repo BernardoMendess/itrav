@@ -13,6 +13,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/api")
@@ -79,5 +81,19 @@ public class ActivityController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(ApiResponse.success(updated, "Atividade reordenada com sucesso"));
+    }
+
+    @GetMapping("/itineraries/{id}/activities")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ApiResponse<List<ActivityDTO>>> listActivitiesByItinerary(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long id) {
+        String email = userDetails.getUsername();
+        log.info("Listando atividades do itinerário {} para usuário {}", id, email);
+        List<ActivityDTO> activities = activityService.listActivitiesByItinerary(email, id);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(activities, "Atividades obtidas com sucesso"));
     }
 }

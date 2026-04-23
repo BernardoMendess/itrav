@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,6 +45,7 @@ public class User {
     private SubscriptionTier subscriptionTier = SubscriptionTier.FREE;
     
     @Column(name = "preferences", columnDefinition = "jsonb")
+    @JdbcTypeCode(SqlTypes.JSON)
     private String preferences; // JSON string with travel preferences
     
     @Column(name = "created_at", nullable = false, updatable = false)

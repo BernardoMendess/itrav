@@ -1,11 +1,10 @@
 package nitcode.itrav.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@Configuration
+// Desabilitado - CORS agora configurado em SecurityConfig
 public class CorsConfig implements WebMvcConfigurer {
     
     @Value("${app.cors.allowed-origins}")
@@ -14,19 +13,13 @@ public class CorsConfig implements WebMvcConfigurer {
     @Value("${app.cors.allowed-methods}")
     private String allowedMethods;
     
-    @Value("${app.cors.allowed-headers}")
-    private String allowedHeaders;
-    
-    @Value("${app.cors.max-age}")
-    private Long maxAge;
-    
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins(allowedOrigins.split(","))
+                .allowedOriginPatterns(allowedOrigins.split(","))
                 .allowedMethods(allowedMethods.split(","))
-                .allowedHeaders(allowedHeaders.split(","))
+                .allowedHeaders("*")
                 .allowCredentials(true)
-                .maxAge(maxAge);
+                .maxAge(3600);
     }
 }

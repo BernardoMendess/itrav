@@ -1,0 +1,137 @@
+<main class="dashboard-shell">
+  <header class="topbar">
+    <div>
+      <p class="chip">iTrav</p>
+      <h1>Dashboard</h1>
+      <p class="muted">Bem-vindo, {{ user()?.name || 'viajante' }}</p>
+    </div>
+    <button class="ghost" type="button" (click)="logout()">Sair</button>
+  </header>
+
+  <section class="card">
+    <h2>Nova viagem</h2>
+    <form [formGroup]="tripForm" (ngSubmit)="createTrip()">
+      <div class="grid">
+        <label>
+          Titulo
+          <input type="text" formControlName="title" />
+        </label>
+        <label>
+          Destino
+          <input type="text" formControlName="destination" />
+        </label>
+        <label>
+          Data inicial
+          <input type="date" formControlName="startDate" />
+        </label>
+        <label>
+          Data final
+          <input type="date" formControlName="endDate" />
+        </label>
+        <label>
+          Objetivo
+          <select formControlName="objective">
+            <option value="lazer">Lazer</option>
+            <option value="business">Business</option>
+            <option value="aventura">Aventura</option>
+          </select>
+        </label>
+        <label>
+          Orcamento
+          <input type="number" formControlName="budget" min="0" />
+        </label>
+      </div>
+
+      <button class="primary" type="submit" [disabled]="creating()">
+        {{ creating() ? 'Criando...' : 'Criar viagem' }}
+      </button>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Minhas viagens</h2>
+
+    @if (errorMessage()) {
+      <p class="error">{{ errorMessage() }}</p>
+    }
+
+    @if (loading()) {
+      <p class="muted">Carregando viagens...</p>
+    } @else if (trips().length === 0) {
+      <p class="muted">Nenhuma viagem criada ainda.</p>
+    } @else {
+      <div class="trip-list">
+        @for (trip of trips(); track trip.id) {
+          <article class="trip-item">
+            <div>
+              <h3>{{ trip.title }}</h3>
+              <p>{{ trip.destination }} · {{ trip.startDate }} ate {{ trip.endDate }}</p>
+              <small>{{ trip.objective }} · {{ trip.status || 'PLANNING' }}</small>
+            </div>
+            <div class="trip-actions">
+              <button class="ghost" type="button" (click)="openPlanner(trip.id)">
+                {{ selectedTripId() === trip.id ? 'Fechar roteiro' : 'Roteiro' }}
+              </button>
+              <button class="danger" type="button" (click)="deleteTrip(trip.id)">Excluir</button>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  </section>
+
+  @if (selectedTripId()) {
+    <section class="card">
+      <h2>Planejador de roteiro</h2>
+      @if (itineraryLoading()) {
+        <p class="muted">Carregando itinerário...</p>
+      } @else if (!selectedItinerary()) {
+        <p class="muted">Nenhum itinerário encontrado para essa viagem.</p>
+        <button class="primary" type="button" (click)="generateItinerary()">Gerar itinerário básico</button>
+      } @else {
+        <p class="muted">
+          Itinerário #{{ selectedItinerary()!.id }} · versão {{ selectedItinerary()!.version }}
+        </p>
+        <button class="ghost" type="button" (click)="generateItinerary()">Gerar nova versão</button>
+
+        <h3 class="section-title">Adicionar atividade</h3>
+        <form [formGroup]="activityForm" (ngSubmit)="createActivity()">
+          <div class="grid">
+            <label>
+              Título
+              <input type="text" formControlName="title" />
+            </label>
+            <label>
+              Dia
+              <input type="number" formControlName="dayNumber" min="1" />
+            </label>
+          </div>
+          <button class="primary" type="submit">Adicionar atividade</button>
+        </form>
+
+        <h3 class="section-title">Atividades</h3>
+        @if (activityLoading()) {
+          <p class="muted">Carregando atividades...</p>
+        } @else if (activities().length === 0) {
+          <p class="muted">Nenhuma atividade cadastrada ainda.</p>
+        } @else {
+          <div class="trip-list">
+            @for (activity of activities(); track activity.id) {
+              <article class="trip-item">
+                <div>
+                  <h3>{{ activity.title }}</h3>
+                  <p>Dia {{ activity.dayNumber || 1 }} · ordem {{ activity.orderIndex || 0 }}</p>
+                </div>
+                <div class="trip-actions">
+                  <button class="ghost" type="button" (click)="moveActivity(activity, 'up')">↑</button>
+                  <button class="ghost" type="button" (click)="moveActivity(activity, 'down')">↓</button>
+                  <button class="danger" type="button" (click)="deleteActivity(activity.id)">Excluir</button>
+                </div>
+              </article>
+            }
+          </div>
+        }
+      }
+    </section>
+  }
+</main>

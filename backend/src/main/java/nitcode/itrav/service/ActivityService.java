@@ -117,6 +117,16 @@ public class ActivityService {
         return ActivityDTO.fromEntity(updated);
     }
 
+    @Transactional(readOnly = true)
+    public List<ActivityDTO> listActivitiesByItinerary(String userEmail, Long itineraryId) {
+        log.info("Listando atividades do itinerário {} para usuário {}", itineraryId, userEmail);
+        Itinerary itinerary = getItineraryOwnedByUser(userEmail, itineraryId);
+        return activityRepository.findByItineraryOrderByDayNumberAscOrderIndexAsc(itinerary)
+                .stream()
+                .map(ActivityDTO::fromEntity)
+                .toList();
+    }
+
     private User getUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("Usuário", "email", email));

@@ -63,6 +63,17 @@ public class ItineraryService {
         return ItineraryDTO.fromEntity(itinerary);
     }
 
+    @Transactional(readOnly = true)
+    public ItineraryDTO getLatestItineraryByTripId(String userEmail, Long tripId) {
+        log.info("Obtendo último itinerário da trip {} do usuário {}", tripId, userEmail);
+        Trip trip = getTripOwnedByUser(userEmail, tripId);
+
+        Itinerary itinerary = itineraryRepository.findFirstByTripOrderByVersionDesc(trip)
+                .orElseThrow(() -> new ResourceNotFoundException("Itinerário", "tripId", tripId));
+
+        return ItineraryDTO.fromEntity(itinerary);
+    }
+
     public ItineraryDTO updateItinerary(String userEmail, Long itineraryId, ItineraryDTO itineraryDTO) {
         log.info("Atualizando itinerário {} do usuário {}", itineraryId, userEmail);
         Itinerary itinerary = getItineraryOwnedByUser(userEmail, itineraryId);

@@ -47,10 +47,15 @@ public class AuthService {
             throw new BusinessException("Email já está registrado");
         }
         
+        String defaultName = request.getEmail().split("@")[0];
+        String userName = request.getName() != null && !request.getName().isBlank()
+                ? request.getName().trim()
+                : defaultName;
+
         // Criar novo usuário
         User user = User.builder()
                 .email(request.getEmail())
-                .name(request.getEmail().split("@")[0]) // Usar parte do email como nome padrão
+                .name(userName)
                 .passwordHash(passwordEncoder.encode(request.getPassword()))
                 .subscriptionTier(User.SubscriptionTier.FREE)
                 .build();

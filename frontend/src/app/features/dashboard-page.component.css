@@ -1,0 +1,138 @@
+.dashboard-shell {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 16px;
+}
+
+.topbar h1 {
+  margin: 6px 0;
+}
+
+.chip {
+  display: inline-block;
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #93c5fd;
+}
+
+.card {
+  background: rgba(17, 24, 39, 0.74);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 16px;
+  padding: 18px;
+}
+
+form {
+  display: grid;
+  gap: 12px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (max-width: 760px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+label {
+  display: grid;
+  gap: 6px;
+  font-size: 0.9rem;
+}
+
+input,
+select {
+  border-radius: 10px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: rgba(15, 23, 42, 0.6);
+  color: #f8fafc;
+  padding: 10px;
+}
+
+.trip-list {
+  display: grid;
+  gap: 10px;
+}
+
+.trip-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.trip-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.trip-item h3 {
+  margin: 0;
+}
+
+.trip-item p,
+.trip-item small {
+  margin: 4px 0 0;
+  color: #cbd5e1;
+}
+
+.primary,
+.ghost,
+.danger {
+  border-radius: 10px;
+  padding: 10px 12px;
+  border: none;
+  cursor: pointer;
+}
+
+.primary {
+  color: #0f172a;
+  font-weight: 700;
+  background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+}
+
+.ghost {
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  background: transparent;
+  color: #e2e8f0;
+}
+
+.danger {
+  background: rgba(239, 68, 68, 0.16);
+  color: #fecaca;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.section-title {
+  margin: 20px 0 10px;
+}
+
+.error {
+  color: #fca5a5;
+}
+
+.muted {
+  color: #cbd5e1;
+  margin: 0;
+}

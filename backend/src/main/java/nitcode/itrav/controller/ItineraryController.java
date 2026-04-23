@@ -49,6 +49,20 @@ public class ItineraryController {
                 .body(ApiResponse.success(itinerary, "Itinerário obtido com sucesso"));
     }
 
+    @GetMapping("/trips/{tripId}/itineraries/latest")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<ApiResponse<ItineraryDTO>> getLatestItineraryByTrip(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @PathVariable Long tripId) {
+        String email = userDetails.getUsername();
+        log.info("Buscando último itinerário da trip {} do usuário {}", tripId, email);
+        ItineraryDTO itinerary = itineraryService.getLatestItineraryByTripId(email, tripId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ApiResponse.success(itinerary, "Último itinerário obtido com sucesso"));
+    }
+
     @PutMapping("/itineraries/{id}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ApiResponse<ItineraryDTO>> updateItinerary(

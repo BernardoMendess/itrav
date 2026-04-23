@@ -11,6 +11,8 @@ import jakarta.validation.constraints.Size;
 @AllArgsConstructor
 @Builder
 public class AuthRequestDTO {
+    private String name;
+
     @Email
     @NotBlank
     private String email;
