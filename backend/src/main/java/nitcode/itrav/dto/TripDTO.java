@@ -29,7 +29,10 @@ public class TripDTO {
     
     private BigDecimal budget;
     private String groupComposition;
+
+    @NotBlank
     private String objective;
+
     private String status;
     
     public static TripDTO fromEntity(Trip trip) {
